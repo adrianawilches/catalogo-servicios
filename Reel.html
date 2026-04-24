@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reel — Consultoría de Procesos</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="animations.jsx"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; background: #0a0a0a; overflow: hidden; }
+  #root { position: absolute; inset: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ── REEL: 30-second social media vertical (1080×1350 — Instagram portrait)
+// Scenes:
+//  0–4s   : Hook — pain point
+//  4–10s  : Problem statements (3 cards)
+//  10–18s : Solution reveal (3 services)
+//  18–24s : Differentiator statement
+//  24–30s : CTA
+
+const W = 1080, H = 1350;
+const GREEN = 'oklch(0.60 0.18 163)';
+const INK = '#0D0D0D';
+const BG = '#FAFAF8';
+
+// ── utility: tween value
+function tv(t, inStart, inEnd, outStart, outEnd, ease = Easing.easeOutCubic) {
+  if (t <= inStart) return outStart;
+  if (t >= inEnd) return outEnd;
+  const p = ease((t - inStart) / (inEnd - inStart));
+  return outStart + (outEnd - outStart) * p;
+}
+
+function clampT(t, a, b) { return Math.max(a, Math.min(b, t)); }
+
+// ── Word-by-word text reveal
+function WordReveal({ text, t, startT, stagger = 0.12, size, weight, color, align = 'center', lineHeight = 1.15 }) {
+  const words = text.split(' ');
+  return (
+    <div style={{ textAlign: align, lineHeight }}>
+      {words.map((w, i) => {
+        const wStart = startT + i * stagger;
+        const op = tv(t, wStart, wStart + 0.35, 0, 1, Easing.easeOutCubic);
+        const ty = tv(t, wStart, wStart + 0.35, 18, 0, Easing.easeOutCubic);
+        return (
+          <span key={i} style={{
+            display: 'inline-block',
+            marginRight: size * 0.28,
+            opacity: op,
+            transform: `translateY(${ty}px)`,
+            fontSize: size,
+            fontWeight: weight,
+            color,
+            fontFamily: "'Sora', sans-serif",
+            letterSpacing: '-0.03em',
+          }}>{w}</span>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Line reveal (slide up)
+function LineReveal({ children, t, startT, dur = 0.5, style = {} }) {
+  const op = tv(t, startT, startT + dur, 0, 1, Easing.easeOutCubic);
+  const ty = tv(t, startT, startT + dur, 24, 0, Easing.easeOutCubic);
+  return (
+    <div style={{ opacity: op, transform: `translateY(${ty}px)`, ...style }}>
+      {children}
+    </div>
+  );
+}
+
+// ── Animated counter
+function Counter({ t, startT, endT, from, to, suffix = '', size, color, weight }) {
+  const val = Math.round(tv(t, startT, endT, from, to, Easing.easeOutExpo));
+  return (
+    <span style={{ fontFamily: "'Sora',sans-serif", fontSize: size, fontWeight: weight, color, letterSpacing: '-0.04em' }}>
+      {val}{suffix}
+    </span>
+  );
+}
+
+// ── Progress bar
+function ProgressBar({ t, duration }) {
+  const pct = (t / duration) * 100;
+  return (
+    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 4, background: 'rgba(255,255,255,0.1)' }}>
+      <div style={{ height: '100%', width: `${pct}%`, background: GREEN, transition: 'width 0.1s linear' }}/>
+    </div>
+  );
+}
+
+// ── Scene components
+
+function SceneHook({ t }) {
+  // 0–4s: dark bg, bold question
+  const bgOp = tv(t, 3.5, 4, 1, 0);
+  const dotScale = tv(t, 0, 0.6, 0.4, 1, Easing.easeOutBack);
+  const dotOp = tv(t, 0, 0.5, 0, 1);
+
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      background: INK,
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      padding: '80px 72px',
+      opacity: bgOp,
+    }}>
+      {/* Dot */}
+      <div style={{
+        width: 16, height: 16, borderRadius: '50%', background: GREEN,
+        marginBottom: 48,
+        opacity: dotOp,
+        transform: `scale(${dotScale})`,
+      }}/>
+
+      <WordReveal
+        text="¿Tus procesos están frenando tu crecimiento?"
+        t={t} startT={0.4} stagger={0.09}
+        size={86} weight={800} color="white"
+        align="center" lineHeight={1.05}
+      />
+
+      <LineReveal t={t} startT={2.2} dur={0.5} style={{ marginTop: 48 }}>
+        <div style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: 34,
+          fontWeight: 300,
+          color: 'rgba(255,255,255,0.5)',
+          textAlign: 'center',
+          letterSpacing: '-0.01em',
+        }}>
+          You're not alone.
+        </div>
+      </LineReveal>
+    </div>
+  );
+}
+
+function ScenePains({ t }) {
+  // 4–10s: white bg, 3 pain cards slide in
+  const bgOp = tv(t, 4, 4.5, 0, 1);
+  const exitOp = tv(t, 9.5, 10, 1, 0);
+
+  const pains = [
+    { es: 'Horas perdidas en tareas manuales', en: 'Manual work stealing your day', color: 'oklch(0.60 0.18 163)' },
+    { es: 'Errores que se repiten sin fin', en: 'The same mistakes, again and again', color: 'oklch(0.60 0.18 163)' },
+    { es: 'Equipos que no adoptan el cambio', en: 'Teams that revert to old habits', color: 'oklch(0.60 0.18 163)' },
+  ];
+
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      background: BG,
+      display: 'flex', flexDirection: 'column',
+      justifyContent: 'center',
+      padding: '100px 72px',
+      opacity: Math.min(bgOp, exitOp),
+    }}>
+      <LineReveal t={t} startT={4.3} style={{ marginBottom: 56 }}>
+        <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, fontFamily: "'DM Sans',sans-serif" }}>
+          ¿Te suena familiar?
+        </div>
+      </LineReveal>
+
+      {pains.map((p, i) => {
+        const cardStart = 4.8 + i * 0.6;
+        const op = tv(t, cardStart, cardStart + 0.5, 0, 1, Easing.easeOutCubic);
+        const tx = tv(t, cardStart, cardStart + 0.5, -60, 0, Easing.easeOutCubic);
+        return (
+          <div key={i} style={{
+            opacity: op,
+            transform: `translateX(${tx}px)`,
+            marginBottom: i < 2 ? 28 : 0,
+            background: 'white',
+            border: '1px solid rgba(13,13,13,0.1)',
+            borderRadius: 16,
+            padding: '40px 48px',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 28,
+          }}>
+            <div style={{
+              width: 10, height: 10, borderRadius: '50%', background: GREEN,
+              flexShrink: 0, marginTop: 14,
+            }}/>
+            <div>
+              <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 40, fontWeight: 700, letterSpacing: '-0.02em', color: INK, lineHeight: 1.1, marginBottom: 8 }}>{p.es}</div>
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 26, fontWeight: 300, color: 'rgba(13,13,13,0.45)', letterSpacing: '-0.01em' }}>{p.en}</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function SceneServices({ t }) {
+  // 10–18s
+  const bgOp = tv(t, 10, 10.5, 0, 1);
+  const exitOp = tv(t, 17.5, 18, 1, 0);
+
+  const services = [
+    { num: '01', es: 'Rediseño de Procesos', en: 'Process Redesign', desc: 'Mapeamos cómo trabajas hoy y diseñamos un modelo que escale.' },
+    { num: '02', es: 'Automatización', en: 'Automation', desc: 'Herramientas de alto impacto accesibles para tu presupuesto.' },
+    { num: '03', es: 'Gestión del Cambio', en: 'Change Management', desc: 'Los cambios que se adoptan y se quedan — para siempre.' },
+  ];
+
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      background: INK,
+      display: 'flex', flexDirection: 'column',
+      justifyContent: 'center',
+      padding: '100px 72px',
+      opacity: Math.min(bgOp, exitOp),
+    }}>
+      <LineReveal t={t} startT={10.3} style={{ marginBottom: 64 }}>
+        <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 72, fontWeight: 800, color: 'white', letterSpacing: '-0.04em', lineHeight: 1 }}>
+          Lo que<br/><span style={{ color: GREEN }}>hacemos.</span>
+        </div>
+      </LineReveal>
+
+      {services.map((s, i) => {
+        const cardStart = 11.2 + i * 0.7;
+        const op = tv(t, cardStart, cardStart + 0.55, 0, 1, Easing.easeOutCubic);
+        const ty = tv(t, cardStart, cardStart + 0.55, 30, 0, Easing.easeOutCubic);
+        return (
+          <div key={i} style={{
+            opacity: op,
+            transform: `translateY(${ty}px)`,
+            marginBottom: i < 2 ? 20 : 0,
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 32,
+            padding: '28px 0',
+            borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+          }}>
+            <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 22, fontWeight: 700, color: GREEN, letterSpacing: '0.05em', flexShrink: 0, width: 48 }}>{s.num}</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 44, fontWeight: 700, color: 'white', letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: 8 }}>{s.es}</div>
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 26, fontWeight: 300, color: 'rgba(255,255,255,0.4)' }}>{s.desc}</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function SceneDiff({ t }) {
+  // 18–24s
+  const bgOp = tv(t, 18, 18.5, 0, 1);
+  const exitOp = tv(t, 23.5, 24, 1, 0);
+  const lineW = tv(t, 19, 21, 0, 100, Easing.easeInOutCubic);
+
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      background: GREEN,
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      padding: '100px 72px',
+      opacity: Math.min(bgOp, exitOp),
+    }}>
+      <LineReveal t={t} startT={18.5} style={{ marginBottom: 32, textAlign: 'center' }}>
+        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 24, fontWeight: 500, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)' }}>
+          Lo que nos hace distintos
+        </div>
+      </LineReveal>
+
+      <div style={{ width: `${lineW}%`, height: 1, background: 'rgba(255,255,255,0.3)', marginBottom: 56, transition: 'none' }}/>
+
+      <WordReveal
+        text="Hablamos el mismo idioma que tu equipo."
+        t={t} startT={19.2} stagger={0.1}
+        size={78} weight={800} color="white"
+        align="center" lineHeight={1.05}
+      />
+
+      <LineReveal t={t} startT={21.5} dur={0.6} style={{ marginTop: 56, textAlign: 'center' }}>
+        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 34, fontWeight: 300, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5, letterSpacing: '-0.01em' }}>
+          Nos quedamos hasta que<br/>el cambio es permanente.
+        </div>
+      </LineReveal>
+
+      {/* Stats */}
+      <div style={{ display: 'flex', gap: 72, marginTop: 72 }}>
+        {[
+          { label: 'adopción más rápida', n: 3, suf: '×' },
+          { label: 'menos tareas manuales', n: 60, suf: '%' },
+        ].map((stat, i) => {
+          const op = tv(t, 22 + i * 0.4, 22.5 + i * 0.4, 0, 1);
+          return (
+            <div key={i} style={{ textAlign: 'center', opacity: op }}>
+              <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 80, fontWeight: 800, color: 'white', letterSpacing: '-0.04em', lineHeight: 1 }}>
+                <Counter t={t} startT={22 + i * 0.4} endT={23} from={0} to={stat.n} suffix={stat.suf} size={80} color="white" weight={800}/>
+              </div>
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 24, fontWeight: 300, color: 'rgba(255,255,255,0.7)', marginTop: 8 }}>{stat.label}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SceneCTA({ t }) {
+  // 24–30s
+  const bgOp = tv(t, 24, 24.6, 0, 1);
+
+  const pulseScale = 1 + 0.018 * Math.sin((t - 24) * Math.PI * 1.2);
+
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      background: BG,
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      padding: '100px 72px',
+      opacity: bgOp,
+      textAlign: 'center',
+    }}>
+      <LineReveal t={t} startT={24.4} style={{ marginBottom: 48 }}>
+        <div style={{ width: 14, height: 14, borderRadius: '50%', background: GREEN, margin: '0 auto 40px' }}/>
+        <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 88, fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.0, color: INK }}>
+          Tu empresa,<br/><span style={{ color: GREEN }}>reinventada.</span>
+        </div>
+      </LineReveal>
+
+      <LineReveal t={t} startT={25.6} dur={0.6} style={{ marginBottom: 72 }}>
+        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 34, fontWeight: 300, color: 'rgba(13,13,13,0.55)', lineHeight: 1.5 }}>
+          Conversación sin costo.<br/>Respuesta en 24 horas.
+        </div>
+      </LineReveal>
+
+      <LineReveal t={t} startT={26.6} dur={0.5}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 20,
+          background: INK,
+          color: 'white',
+          padding: '32px 64px',
+          borderRadius: 100,
+          fontFamily: "'Sora',sans-serif",
+          fontSize: 38,
+          fontWeight: 700,
+          letterSpacing: '-0.02em',
+          transform: `scale(${pulseScale})`,
+        }}>
+          Hablemos →
+        </div>
+      </LineReveal>
+
+      <LineReveal t={t} startT={27.5} dur={0.5} style={{ marginTop: 60 }}>
+        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 26, fontWeight: 400, letterSpacing: '0.06em', color: 'rgba(13,13,13,0.35)', textTransform: 'uppercase' }}>
+          Process Redesign · Automation · Change Management
+        </div>
+      </LineReveal>
+    </div>
+  );
+}
+
+function Reel() {
+  const t = useTime();
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+      {t < 10.5 && <SceneHook t={t} />}
+      {t >= 3.5 && t < 10.5 && <ScenePains t={t} />}
+      {t >= 9.5 && t < 18.5 && <SceneServices t={t} />}
+      {t >= 17.5 && t < 24.5 && <SceneDiff t={t} />}
+      {t >= 23.5 && <SceneCTA t={t} />}
+      <ProgressBar t={t} duration={30} />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Stage width={W} height={H} duration={30} background={INK} loop={true} autoplay={true} persistKey="reel">
+      <Reel />
+    </Stage>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

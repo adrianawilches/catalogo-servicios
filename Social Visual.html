@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Social Visual — Consultoría de Procesos</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: oklch(0.60 0.18 163);
+    --green-light: oklch(0.94 0.06 163);
+    --ink: #0D0D0D;
+    --bg: #FAFAF8;
+  }
+  body {
+    background: #1a1a1a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    padding: 40px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .ctrl-btn {
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover, .ctrl-btn.active { background: var(--green); color: white; border-color: var(--green); }
+  .label { font-size: 11px; color: rgba(255,255,255,0.25); letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
+
+  /* ── CARD WRAPPER ── */
+  .card-wrap {
+    position: relative;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+
+  /* ── BASE CARD ── */
+  .card {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    overflow: hidden;
+    display: none;
+    transform-origin: top left;
+  }
+  .card.active { display: block; }
+
+  /* ── CARD 1: Dark hero ── */
+  #card1 {
+    background: var(--ink);
+    font-family: 'Sora', sans-serif;
+  }
+  .c1-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 90px 90px;
+  }
+  .c1-accent-blob {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: var(--green);
+    opacity: 0.07;
+    filter: blur(120px);
+    top: -100px; right: -100px;
+  }
+  .c1-content {
+    position: absolute;
+    inset: 0;
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .c1-top { display: flex; align-items: center; gap: 12px; }
+  .c1-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
+  .c1-brand { font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.01em; }
+  .c1-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 40px 0; }
+  .c1-eyebrow { font-size: 16px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); margin-bottom: 32px; }
+  .c1-headline { font-size: 120px; font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; color: white; margin-bottom: 48px; }
+  .c1-headline em { font-style: normal; color: var(--green); }
+  .c1-sub { font-size: 28px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.5; font-family: 'DM Sans', sans-serif; max-width: 680px; }
+  .c1-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .c1-services { display: flex; gap: 12px; flex-wrap: wrap; }
+  .c1-tag {
+    padding: 10px 20px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .c1-cta {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    display: flex; align-items: center; gap: 8px;
+    letter-spacing: -0.01em;
+  }
+  .c1-arrow {
+    width: 44px; height: 44px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  /* ── CARD 2: White pain ── */
+  #card2 { background: var(--bg); }
+  .c2-content { position: absolute; inset: 0; padding: 80px; display: flex; flex-direction: column; }
+  .c2-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 72px; }
+  .c2-headline { font-family: 'Sora', sans-serif; font-size: 72px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.0; color: var(--ink); }
+  .c2-headline em { font-style: normal; color: var(--green); }
+  .c2-en { font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 300; color: rgba(13,13,13,0.35); letter-spacing: 0.02em; margin-top: 12px; }
+  .c2-num-big { font-family: 'Sora', sans-serif; font-size: 200px; font-weight: 800; letter-spacing: -0.05em; color: var(--green-light); line-height: 1; user-select: none; }
+  .c2-pains { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .c2-pain {
+    flex: 1;
+    background: white;
+    border: 1px solid rgba(13,13,13,0.08);
+    display: flex; align-items: center; gap: 32px;
+    padding: 32px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .c2-pain::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--green);
+  }
+  .c2-pain-num { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; color: var(--green); width: 32px; flex-shrink: 0; }
+  .c2-pain-es { font-family: 'Sora', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.025em; color: var(--ink); flex: 1; }
+  .c2-pain-en { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 300; color: rgba(13,13,13,0.4); white-space: nowrap; }
+  .c2-bottom { margin-top: 32px; display: flex; justify-content: space-between; align-items: center; }
+  .c2-brand { display: flex; align-items: center; gap: 8px; }
+  .c2-brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .c2-brand-name { font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 600; color: rgba(13,13,13,0.4); }
+
+  /* ── CARD 3: Green statement ── */
+  #card3 { background: var(--green); }
+  .c3-content { position: absolute; inset: 0; padding: 80px; display: flex; flex-direction: column; justify-content: space-between; }
+  .c3-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .c3-brand { font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.6); letter-spacing: 0.02em; }
+  .c3-steps { display: flex; gap: 12px; }
+  .c3-step-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); }
+  .c3-step-dot.filled { background: white; border-color: white; }
+  .c3-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .c3-label { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 32px; }
+  .c3-quote { font-family: 'Sora', sans-serif; font-size: 96px; font-weight: 800; letter-spacing: -0.04em; line-height: 0.98; color: white; margin-bottom: 48px; }
+  .c3-sub { font-family: 'DM Sans', sans-serif; font-size: 30px; font-weight: 300; color: rgba(255,255,255,0.65); line-height: 1.5; max-width: 800px; }
+  .c3-bottom { display: flex; gap: 80px; }
+  .c3-stat-num { font-family: 'Sora', sans-serif; font-size: 80px; font-weight: 800; letter-spacing: -0.04em; color: white; line-height: 1; }
+  .c3-stat-label { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 300; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .c3-divider { width: 1px; background: rgba(255,255,255,0.2); align-self: stretch; }
+  .c3-cta-pill {
+    margin-left: auto;
+    align-self: flex-end;
+    background: white;
+    color: var(--green);
+    padding: 20px 40px;
+    border-radius: 100px;
+    font-family: 'Sora', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  /* ── TWEAKS ── */
+  #tweaks-panel {
+    display: none;
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: #1e1e1e;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 20px 24px;
+    z-index: 1000;
+    width: 260px;
+    color: white;
+  }
+  #tweaks-panel.open { display: block; }
+  .tweak-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 16px; }
+  .tweak-row { margin-bottom: 14px; }
+  .tweak-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+  .tweak-opts { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tweak-opt {
+    font-size: 12px; padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px; cursor: pointer;
+    background: transparent; color: rgba(255,255,255,0.6);
+    font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+  }
+  .tweak-opt:hover, .tweak-opt.active { background: var(--green); color: white; border-color: var(--green); }
+</style>
+</head>
+<body>
+
+<div class="label">Social Visual · 1080×1080 · Consultoría de Procesos</div>
+
+<div class="controls">
+  <button class="ctrl-btn active" onclick="showCard(1, this)">01 Hero Dark</button>
+  <button class="ctrl-btn" onclick="showCard(2, this)">02 Pain Points</button>
+  <button class="ctrl-btn" onclick="showCard(3, this)">03 Differentiator</button>
+</div>
+
+<div class="card-wrap" id="cardWrap">
+  <!-- CARD 1: Dark Hero -->
+  <div class="card active" id="card1">
+    <div class="c1-grid"></div>
+    <div class="c1-accent-blob"></div>
+    <div class="c1-content">
+      <div class="c1-top">
+        <div class="c1-dot"></div>
+        <div class="c1-brand">Consultoría de Procesos</div>
+      </div>
+      <div class="c1-mid">
+        <div class="c1-eyebrow">Process Redesign · Automation · Change Mgmt</div>
+        <div class="c1-headline">Tu empresa,<br/><em>reinventada.</em></div>
+        <div class="c1-sub">Transformamos procesos que frenan tu crecimiento en sistemas que escalan — junto a tu equipo, para que los cambios se queden.</div>
+      </div>
+      <div class="c1-bottom">
+        <div class="c1-services">
+          <div class="c1-tag">Rediseño</div>
+          <div class="c1-tag">Automatización</div>
+          <div class="c1-tag">Cambio</div>
+        </div>
+        <div class="c1-cta">
+          Hablemos
+          <div class="c1-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: Pain Points -->
+  <div class="card" id="card2">
+    <div class="c2-content">
+      <div class="c2-header">
+        <div>
+          <div class="c2-headline">¿Te suena<br/><em>familiar?</em></div>
+          <div class="c2-en">Does this sound familiar?</div>
+        </div>
+        <div class="c2-num-big">?</div>
+      </div>
+      <div class="c2-pains">
+        <div class="c2-pain">
+          <div class="c2-pain-num">01</div>
+          <div class="c2-pain-es">Horas perdidas en tareas manuales</div>
+          <div class="c2-pain-en">Manual work</div>
+        </div>
+        <div class="c2-pain">
+          <div class="c2-pain-num">02</div>
+          <div class="c2-pain-es">Errores que se repiten sin causa clara</div>
+          <div class="c2-pain-en">Endless rework</div>
+        </div>
+        <div class="c2-pain">
+          <div class="c2-pain-num">03</div>
+          <div class="c2-pain-es">No sabes por dónde empezar a digitalizar</div>
+          <div class="c2-pain-en">Where to start?</div>
+        </div>
+        <div class="c2-pain">
+          <div class="c2-pain-num">04</div>
+          <div class="c2-pain-es">El equipo no adopta los cambios</div>
+          <div class="c2-pain-en">Change resistance</div>
+        </div>
+      </div>
+      <div class="c2-bottom">
+        <div class="c2-brand">
+          <div class="c2-brand-dot"></div>
+          <div class="c2-brand-name">Consultoría de Procesos</div>
+        </div>
+        <div style="font-family:'DM Sans',sans-serif; font-size:15px; color:rgba(13,13,13,0.35);">Nosotros tenemos las respuestas →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: Green Differentiator -->
+  <div class="card" id="card3">
+    <div class="c3-content">
+      <div class="c3-top">
+        <div class="c3-brand">Consultoría de Procesos</div>
+        <div class="c3-steps">
+          <div class="c3-step-dot filled"></div>
+          <div class="c3-step-dot filled"></div>
+          <div class="c3-step-dot filled"></div>
+        </div>
+      </div>
+      <div class="c3-mid">
+        <div class="c3-label">Lo que nos hace distintos · Our edge</div>
+        <div class="c3-quote">"Hablamos tu<br/>idioma."</div>
+        <div class="c3-sub">Nos quedamos con tu equipo hasta que el cambio es permanente. No dejamos manuales. Dejamos hábitos.</div>
+      </div>
+      <div class="c3-bottom">
+        <div>
+          <div class="c3-stat-num">3×</div>
+          <div class="c3-stat-label">adopción más rápida</div>
+        </div>
+        <div class="c3-divider"></div>
+        <div>
+          <div class="c3-stat-num">60%</div>
+          <div class="c3-stat-label">menos tareas manuales</div>
+        </div>
+        <div class="c3-cta-pill">Hablemos →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="label" id="sizeLabel">Escala: 100% · 1080×1080px</div>
+
+<!-- TWEAKS -->
+<div id="tweaks-panel">
+  <div class="tweak-title">Tweaks</div>
+  <div class="tweak-row">
+    <div class="tweak-label">Acento de color</div>
+    <div class="tweak-opts">
+      <button class="tweak-opt active" onclick="setGreen('oklch(0.60 0.18 163)', this)">Verde</button>
+      <button class="tweak-opt" onclick="setGreen('oklch(0.55 0.18 250)', this)">Azul</button>
+      <button class="tweak-opt" onclick="setGreen('oklch(0.58 0.18 30)', this)">Naranja</button>
+      <button class="tweak-opt" onclick="setGreen('oklch(0.50 0.18 320)', this)">Violeta</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <div class="tweak-label">Vista</div>
+    <div class="tweak-opts">
+      <button class="tweak-opt active" onclick="setScale(0.45, this)">Fit</button>
+      <button class="tweak-opt" onclick="setScale(0.6, this)">60%</button>
+      <button class="tweak-opt" onclick="setScale(1, this)">Full</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{"accent":"oklch(0.60 0.18 163)","scale":0.45}/*EDITMODE-END*/;
+
+  function showCard(n, btn) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    document.getElementById('card' + n).classList.add('active');
+    document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function setGreen(color, btn) {
+    document.documentElement.style.setProperty('--green', color);
+    document.documentElement.style.setProperty('--green-light', color.replace('0.60', '0.94').replace('0.55','0.94').replace('0.58','0.94').replace('0.50','0.94').replace('0.18', '0.06'));
+    document.querySelectorAll('#tweaks-panel .tweak-opt').forEach(b => {
+      if (b.onclick?.toString().includes('setGreen')) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { accent: color } }, '*');
+  }
+
+  let currentScale = TWEAK_DEFAULTS.scale || 0.45;
+  function setScale(s, btn) {
+    currentScale = s;
+    applyScale();
+    document.querySelectorAll('#tweaks-panel .tweak-opt').forEach(b => {
+      if (b.onclick?.toString().includes('setScale')) b.classList.remove('active');
+    });
+    if (btn) btn.classList.add('active');
+    document.getElementById('sizeLabel').textContent = `Escala: ${Math.round(s*100)}% · 1080×1080px`;
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { scale: s } }, '*');
+  }
+
+  function applyScale() {
+    const wrap = document.getElementById('cardWrap');
+    wrap.style.width = (1080 * currentScale) + 'px';
+    wrap.style.height = (1080 * currentScale) + 'px';
+    document.querySelectorAll('.card').forEach(c => {
+      c.style.transform = `scale(${currentScale})`;
+    });
+  }
+
+  applyScale();
+
+  // Tweaks toggle
+  window.addEventListener('message', e => {
+    if (e.data?.type === '__activate_edit_mode') document.getElementById('tweaks-panel').classList.add('open');
+    if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').classList.remove('open');
+  });
+  window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+  if (TWEAK_DEFAULTS.accent) document.documentElement.style.setProperty('--green', TWEAK_DEFAULTS.accent);
+</script>
+</body>
+</html>

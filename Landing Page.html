@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title data-i18n="meta.title">Consultoría de Procesos — Tu empresa, potencIAda.</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #FAFAF8;
+    --ink: #0D0D0D;
+    --ink-60: rgba(13,13,13,0.6);
+    --ink-20: rgba(13,13,13,0.1);
+    --green: oklch(0.58 0.18 30);
+    --green-light: oklch(0.94 0.06 30);
+    --serif: 'Sora', sans-serif;
+    --body: 'DM Sans', sans-serif;
+    --radius: 4px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--body);
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(250,250,248,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--ink-20);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-size: 14px; color: var(--ink-60); text-decoration: none;
+    font-weight: 400; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    background: var(--ink); color: var(--bg) !important;
+    padding: 10px 22px; border-radius: 100px;
+    font-weight: 500 !important; font-size: 14px !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .nav-cta:hover { background: var(--green) !important; color: white !important; transform: translateY(-1px); }
+
+  /* ── LANG TOGGLE ── */
+  .lang-toggle {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(13,13,13,0.06);
+    border-radius: 100px;
+    padding: 3px;
+    margin-right: 4px;
+  }
+  .lang-btn {
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 10px;
+    border-radius: 100px;
+    border: none; background: transparent;
+    font-family: var(--body); font-size: 12px; font-weight: 500;
+    color: var(--ink-60); cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.04em;
+  }
+  .lang-btn .flag { font-size: 15px; line-height: 1; }
+  .lang-btn:hover { color: var(--ink); }
+  .lang-btn.active {
+    background: white;
+    color: var(--ink);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
+  .full-bleed { max-width: none; padding-left: 0; padding-right: 0; }
+
+  /* ── HERO ── */
+  #hero {
+    padding-top: 200px; padding-bottom: 100px;
+    display: grid; grid-template-columns: 1fr 340px;
+    gap: 80px; align-items: end;
+  }
+  .hero-eyebrow {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--green); margin-bottom: 28px;
+  }
+  h1 {
+    font-family: var(--serif); font-size: clamp(56px, 7vw, 96px);
+    font-weight: 800; line-height: 1.0; letter-spacing: -0.03em;
+    color: var(--ink); margin-bottom: 32px;
+  }
+  h1 em { font-style: normal; }
+  .hero-sub {
+    font-size: 18px; line-height: 1.6; color: var(--ink-60);
+    max-width: 480px; margin-bottom: 48px; font-weight: 300;
+    font-family: 'Fira Sans', var(--body);
+  }
+  .hero-sub strong { color: var(--ink); font-weight: 500; }
+  .hero-ctas { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--ink); color: white; padding: 16px 36px;
+    border-radius: 100px; font-family: var(--body); font-size: 15px;
+    font-weight: 500; text-decoration: none; cursor: pointer; border: none;
+    transition: background 0.2s, transform 0.15s; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--green); transform: translateY(-2px); }
+  .btn-secondary {
+    color: var(--ink-60); font-size: 14px; text-decoration: none;
+    display: flex; align-items: center; gap: 6px; transition: color 0.2s;
+  }
+  .btn-secondary:hover { color: var(--ink); }
+  .btn-secondary::after { content: '→'; }
+
+  .hero-aside {
+    padding-bottom: 8px; border-left: 1px solid var(--ink-20);
+    padding-left: 40px; display: flex; flex-direction: column; gap: 28px;
+  }
+  .hero-stat-num {
+    font-family: var(--serif); font-size: 42px; font-weight: 800;
+    letter-spacing: -0.03em; color: var(--ink); line-height: 1;
+  }
+  .hero-stat-num span { color: var(--green); }
+  .hero-stat-label {
+    font-size: 13px; color: var(--ink-60); margin-top: 4px;
+    line-height: 1.4; font-weight: 300;
+  }
+  .hero-divider { width: 40px; height: 1px; background: var(--ink-20); }
+
+  /* ── MARQUEE ── */
+  .marquee-strip {
+    border-top: 1px solid var(--ink-20); border-bottom: 1px solid var(--ink-20);
+    overflow: hidden; padding: 18px 0; background: var(--bg);
+  }
+  .marquee-track {
+    display: flex; gap: 0; width: max-content;
+    animation: marquee 24s linear infinite;
+  }
+  .marquee-item {
+    padding: 0 48px; font-size: 13px; font-weight: 400;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-60);
+    display: flex; align-items: center; gap: 20px; white-space: nowrap;
+  }
+  .marquee-dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--green); flex-shrink: 0;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── PAIN SECTION ── */
+  .pain-header { display: flex; align-items: baseline; gap: 32px; margin-bottom: 72px; }
+  h2 {
+    font-family: var(--serif); font-size: clamp(36px, 4.5vw, 56px);
+    font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink);
+  }
+  .section-en {
+    font-size: 13px; font-weight: 400; letter-spacing: 0.04em;
+    color: var(--ink-60); text-transform: uppercase; white-space: nowrap;
+  }
+  .pain-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 2px; border: 1px solid var(--ink-20);
+  }
+  .pain-card {
+    padding: 48px; border: 1px solid transparent;
+    transition: background 0.3s, border-color 0.3s;
+    cursor: default; position: relative; overflow: hidden;
+  }
+  .pain-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--green);
+    transform: scaleY(0); transition: transform 0.3s; transform-origin: bottom;
+  }
+  .pain-card:hover { background: white; }
+  .pain-card:hover::before { transform: scaleY(1); }
+  .pain-num {
+    font-family: var(--serif); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.15em; color: var(--green); margin-bottom: 16px;
+  }
+  .pain-title {
+    font-family: var(--serif); font-size: 22px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 12px;
+  }
+  .pain-desc { font-size: 15px; color: var(--ink-60); line-height: 1.6; font-weight: 300; }
+
+  /* ── SERVICES ── */
+  #services { background: var(--ink); color: white; max-width: none; padding: 120px 48px; }
+  #services h2 { color: white; }
+  #services .section-en { color: rgba(255,255,255,0.4); }
+  .services-inner { max-width: 1200px; margin: 0 auto; }
+  .services-header { margin-bottom: 72px; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .service-card {
+    padding: 56px 40px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06); transition: background 0.3s; position: relative;
+  }
+  .service-card:hover { background: rgba(255,255,255,0.08); }
+  .service-icon {
+    width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 32px; color: var(--green);
+  }
+  .service-num {
+    position: absolute; top: 40px; right: 40px;
+    font-family: var(--serif); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; color: rgba(255,255,255,0.2);
+  }
+  .service-title {
+    font-family: var(--serif); font-size: 26px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.2; color: white; margin-bottom: 8px;
+  }
+  .service-title-en {
+    font-size: 12px; color: rgba(255,255,255,0.65); letter-spacing: 0.06em;
+    font-weight: 400; margin-bottom: 24px; font-style: italic;
+  }
+  .service-desc {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.82);
+    font-weight: 300; margin-bottom: 28px;
+  }
+  .service-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .service-tag {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    padding: 4px 12px; border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 100px; color: rgba(255,255,255,0.75);
+  }
+
+  /* ── DIFFERENTIATOR ── */
+  #diff { display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: center; }
+  .diff-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--green); margin-bottom: 24px;
+  }
+  .diff-quote {
+    font-family: var(--serif); font-size: clamp(28px, 3vw, 40px);
+    font-weight: 800; letter-spacing: -0.03em; line-height: 1.15;
+    color: var(--ink); margin-bottom: 32px;
+  }
+  .diff-body { font-size: 16px; line-height: 1.75; color: var(--ink-60); font-weight: 300; }
+  .diff-body + .diff-body { margin-top: 16px; }
+  .diff-right { position: relative; }
+  .diff-big-number {
+    font-family: var(--serif); font-size: 160px; font-weight: 800;
+    letter-spacing: -0.05em; color: var(--green-light); line-height: 1;
+    position: absolute; top: -40px; right: -20px; z-index: 0; user-select: none;
+  }
+  .diff-cards { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; }
+  .diff-card {
+    background: white; border: 1px solid var(--ink-20);
+    padding: 28px 32px; border-radius: 8px; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .diff-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+  .diff-card-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--green); text-transform: uppercase; margin-bottom: 8px; }
+  .diff-card-title { font-family: var(--serif); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .diff-card-desc { font-size: 14px; color: var(--ink-60); line-height: 1.6; font-weight: 300; }
+
+  /* ── HOW IT WORKS ── */
+  #how { background: var(--green-light); max-width: none; }
+  .how-inner { max-width: 1200px; margin: 0 auto; }
+  .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 72px; }
+  .how-step { padding: 48px 40px; background: var(--bg); position: relative; }
+  .how-step-num {
+    font-family: var(--serif); font-size: 64px; font-weight: 800;
+    letter-spacing: -0.04em; color: var(--ink-20); line-height: 1; margin-bottom: 32px;
+  }
+  .how-step-title { font-family: var(--serif); font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
+  .how-step-desc { font-size: 15px; color: var(--ink-60); line-height: 1.65; font-weight: 300; }
+  .how-connector {
+    position: absolute; top: 60px; right: -14px;
+    width: 28px; height: 28px; background: var(--green); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 12px; z-index: 2;
+  }
+
+  /* ── CTA ── */
+  .cta-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--green); margin-bottom: 24px;
+  }
+  #cta-section h2 { margin-bottom: 24px; }
+  .cta-note { font-size: 13px; color: var(--ink-60); margin-top: 16px; font-weight: 300; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--ink-20); padding: 40px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-copy { font-size: 13px; color: var(--ink-60); font-weight: 300; }
+  .footer-links { display: flex; gap: 24px; list-style: none; }
+  .footer-links a { font-size: 13px; color: var(--ink-60); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--green); }
+
+  /* ── REVEAL ANIMATIONS ── */
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── TWEAKS PANEL ── */
+  #tweaks-panel {
+    display: none; position: fixed; bottom: 24px; right: 24px;
+    background: white; border: 1px solid var(--ink-20); border-radius: 12px;
+    padding: 20px 24px; z-index: 1000; box-shadow: 0 8px 40px rgba(0,0,0,0.1); width: 260px;
+  }
+  #tweaks-panel.open { display: block; }
+  .tweak-title { font-family: var(--serif); font-weight: 700; font-size: 14px; margin-bottom: 16px; }
+  .tweak-row { margin-bottom: 14px; }
+  .tweak-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-60); margin-bottom: 6px; }
+  .tweak-options { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tweak-opt {
+    font-size: 12px; padding: 4px 10px; border: 1px solid var(--ink-20);
+    border-radius: 100px; cursor: pointer; transition: all 0.15s;
+    background: transparent; color: var(--ink); font-family: var(--body);
+  }
+  .tweak-opt:hover, .tweak-opt.active { background: var(--ink); color: white; border-color: var(--ink); }
+  .tweak-opt.green-active { background: var(--green); color: white; border-color: var(--green); }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 20px; gap: 12px; }
+    .nav-links { gap: 16px; }
+    section { padding: 80px 24px; }
+    #hero { grid-template-columns: 1fr; padding-top: 140px; }
+    .hero-aside { border-left: none; padding-left: 0; border-top: 1px solid var(--ink-20); padding-top: 32px; flex-direction: row; flex-wrap: wrap; gap: 32px; }
+    .hero-divider { display: none; }
+    .pain-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    #diff { grid-template-columns: 1fr; gap: 60px; }
+    .how-steps { grid-template-columns: 1fr; }
+    .how-connector { display: none; }
+    #services { padding: 80px 24px; }
+    #how { padding: 80px 24px; }
+    .diff-big-number { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    <span data-i18n="nav.brand">Consultoría de Procesos</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#pain" data-i18n="nav.diagnosis">Diagnóstico</a></li>
+    <li><a href="#services" data-i18n="nav.services">Servicios</a></li>
+    <li><a href="#diff" data-i18n="nav.approach">Enfoque</a></li>
+    <li>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-es" onclick="setLang('es')">
+          <span class="flag">🇨🇴</span> ES
+        </button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">
+          <span class="flag">🇺🇸</span> EN
+        </button>
+      </div>
+    </li>
+    <li><a href="#cta-section" class="nav-cta" data-i18n="nav.cta">Hablemos →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="full-bleed" style="max-width:1200px;margin:0 auto;padding-left:48px;padding-right:48px;">
+  <div>
+    <div class="hero-eyebrow reveal" data-i18n="hero.eyebrow">Rediseño · Automatización · Gestión del Cambio</div>
+    <h1 class="reveal reveal-delay-1" id="hero-h1">Tu empresa,<br/><em style="color:rgb(223,11,11)">potenc<span style="color:oklch(0.72 0.18 30)">IA</span>da.</em></h1>
+    <p class="hero-sub reveal reveal-delay-2" id="hero-sub">
+      Transformamos cómo trabaja tu empresa — y nos quedamos hasta que tu equipo no quiera volver atrás.<br/><br/>Cada <strong>reproceso</strong> es crecimiento que pierdes.
+    </p>
+    <div class="hero-ctas reveal reveal-delay-3">
+      <a href="#cta-section" class="btn-primary" data-i18n="hero.cta1">Agenda una conversación</a>
+      <a href="#services" class="btn-secondary" data-i18n="hero.cta2">Ver servicios</a>
+    </div>
+  </div>
+  <div class="hero-aside reveal reveal-delay-2">
+    <div class="hero-stat">
+      <div class="hero-stat-num"><span>12.9M USD</span></div>
+      <div class="hero-stat-label" data-i18n="hero.stat1">"Perdidos por data errónea en empresas medianas"<br/><small style="font-weight:500;letter-spacing:0.06em"><em>Gartner</em></small></div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">50<span>%</span></div>
+      <div class="hero-stat-label" data-i18n="hero.stat2">"Del salario anual te cuesta reemplazar un empleado"<br/><small style="font-weight:500;letter-spacing:0.06em"><em>Gallup</em></small></div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">Día <span>1</span></div>
+      <div class="hero-stat-label" data-i18n="hero.stat3"><strong>Conectamos</strong> con tu equipo desde el inicio. Hablamos un mismo idioma.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="marquee-track">
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.1">Rediseño de procesos</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.2">Automatización</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.3">Gestión del cambio</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.4">Digitalización</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.5">Eficiencia operativa</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.6">Transformación</span></div>
+    <!-- duplicate -->
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.1">Rediseño de procesos</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.2">Automatización</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.3">Gestión del cambio</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.4">Digitalización</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.5">Eficiencia operativa</span></div>
+    <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.6">Transformación</span></div>
+  </div>
+</div>
+
+<!-- PAIN POINTS -->
+<section id="pain">
+  <div class="pain-header">
+    <h2 class="reveal" data-i18n="pain.title">¿Te suena familiar?</h2>
+  </div>
+  <div class="pain-grid">
+    <div class="pain-card reveal">
+      <div class="pain-num">01</div>
+      <div class="pain-title" data-i18n="pain.1.title">El día se va en tareas <span style="color:oklch(0.72 0.18 30)">manuales</span></div>
+      <p class="pain-desc" data-i18n="pain.1.desc">Tu equipo dedica horas a copiar, pegar, enviar correos y actualizar documentos que deberían ser automáticas.</p>
+    </div>
+    <div class="pain-card reveal reveal-delay-1">
+      <div class="pain-num">02</div>
+      <div class="pain-title" data-i18n="pain.2.title">Los <span style="color:oklch(0.72 0.18 30)">errores</span> se repiten y nadie sabe por qué</div>
+      <p class="pain-desc" data-i18n="pain.2.desc">Fallas sin dueño, reprocesos costosos y clientes que lo sienten. El problema no es la gente — es el proceso.</p>
+    </div>
+    <div class="pain-card reveal reveal-delay-2">
+      <div class="pain-num">03</div>
+      <div class="pain-title" data-i18n="pain.3.title">Quieres <span style="color:oklch(0.72 0.18 30)">evolucionar</span> pero no sabes por dónde empezar</div>
+      <p class="pain-desc" data-i18n="pain.3.desc">Hay muchas herramientas, muchos consultores, pero no un camino claro. La tecnología se siente abrumadora.</p>
+    </div>
+    <div class="pain-card reveal reveal-delay-3">
+      <div class="pain-num">04</div>
+      <div class="pain-title" data-i18n="pain.4.title">Tu equipo <span style="color:oklch(0.72 0.18 30)">resiste</span> los cambios</div>
+      <p class="pain-desc" data-i18n="pain.4.desc">Implementaste algo nuevo y el equipo volvió a lo de siempre. Los cambios sin gestión adecuada no duran.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="full-bleed">
+  <div class="services-inner">
+    <div class="services-header">
+      <div class="pain-header" style="margin-bottom:0;">
+        <h2 class="reveal" style="color:white;" data-i18n="services.title">Lo que hacemos</h2>
+      </div>
+    </div>
+    <div class="services-grid" style="margin-top:72px;">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <div class="service-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+        </div>
+        <div class="service-title" data-i18n="services.1.title">Rediseño de Procesos</div>
+        <div class="service-title-en" data-i18n="services.1.subtitle">Process Redesign</div>
+        <p class="service-desc" data-i18n="services.1.desc" style="color:rgb(239,237,237)">Entendemos cómo trabaja tu empresa hoy, identificamos las <span style="color:oklch(0.72 0.18 30)">oportunidades</span> y diseñamos un modelo operativo que realmente escale.</p>
+        <div class="service-tags">
+          <span class="service-tag">Mapeo AS-IS / TO-BE</span>
+          <span class="service-tag">BPMN</span>
+          <span class="service-tag">Lean</span>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-num">02</div>
+        <div class="service-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div class="service-title" data-i18n="services.2.title">Automatización</div>
+        <div class="service-title-en" data-i18n="services.2.subtitle">Process Automation</div>
+        <p class="service-desc" data-i18n="services.2.desc">Identificamos qué automatizar primero para el mayor <span style="color:oklch(0.72 0.18 30)">impacto</span> con el menor costo. Implementamos con herramientas accesibles para tu <span style="color:oklch(0.72 0.18 30)">presupuesto</span>.</p>
+        <div class="service-tags">
+          <span class="service-tag">RPA</span>
+          <span class="service-tag">IA</span>
+          <span class="service-tag">Integraciones</span>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-num">03</div>
+        <div class="service-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <div class="service-title" data-i18n="services.3.title">Gestión del Cambio</div>
+        <div class="service-title-en" data-i18n="services.3.subtitle">Change Management</div>
+        <p class="service-desc" data-i18n="services.3.desc">El <span style="color:oklch(0.72 0.18 30)">cambio real</span> ocurre cuando las <span style="color:oklch(0.72 0.18 30)">personas</span> lo <span style="color:oklch(0.72 0.18 30)">adoptan</span>. Trabajamos con tu equipo para que los nuevos procesos permanezcan.</p>
+        <div class="service-tags">
+          <span class="service-tag" data-i18n="services.3.tag1">Comunicación</span>
+          <span class="service-tag" data-i18n="services.3.tag2">Capacitación</span>
+          <span class="service-tag" data-i18n="services.3.tag3">Adopción</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIATOR -->
+<section id="diff">
+  <div class="diff-left">
+    <div class="diff-label reveal" data-i18n="diff.label">Lo que nos hace distintos ·</div>
+    <div class="diff-quote reveal reveal-delay-1" data-i18n="diff.quote">"Hablamos el mismo idioma que tu equipo."</div>
+    <p class="diff-body reveal reveal-delay-2" data-i18n="diff.body1">No llegamos a imponer metodologías ni a dejar manuales que pocos leen. Nos sentamos con tu gente, entendemos su realidad y co-diseñamos las soluciones.</p>
+    <p class="diff-body reveal reveal-delay-3" data-i18n="diff.body2">Eso se traduce en cambios que duran. En equipos que no solo toleran la transformación, sino que la lideran.</p>
+  </div>
+  <div class="diff-right">
+    <div class="diff-big-number">3</div>
+    <div class="diff-cards">
+      <div class="diff-card reveal">
+        <div class="diff-card-label" data-i18n="diff.card1.label">Enfoque · Approach</div>
+        <div class="diff-card-title" data-i18n="diff.card1.title">Juntos encontramos el camino</div>
+        <p class="diff-card-desc" data-i18n="diff.card1.desc">Descubrimos junto a tu equipo nuevas oportunidades buscando el mayor impacto.</p>
+      </div>
+      <div class="diff-card reveal reveal-delay-1">
+        <div class="diff-card-label" data-i18n="diff.card2.label">Presupuesto · Budget</div>
+        <div class="diff-card-title" data-i18n="diff.card2.title">Soluciones a tu medida económica</div>
+        <p class="diff-card-desc" data-i18n="diff.card2.desc">Herramientas de alto impacto con costos accesibles. Calculamos el retorno de tu inversión y los gastos recurrentes futuros.</p>
+      </div>
+      <div class="diff-card reveal reveal-delay-2">
+        <div class="diff-card-label" data-i18n="diff.card3.label">Continuidad · Continuity</div>
+        <div class="diff-card-title" data-i18n="diff.card3.title">Adopción, no aversión</div>
+        <p class="diff-card-desc" data-i18n="diff.card3.desc">Los cambios que implementamos se quedan. Trabajamos hasta que la adopción sea real y sostenible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="full-bleed">
+  <div class="how-inner">
+    <div class="pain-header">
+      <h2 class="reveal" data-i18n="how.title">¿Cómo trabajamos?</h2>
+    </div>
+    <div class="how-steps">
+      <div class="how-step reveal" style="position:relative;">
+        <div class="how-step-num">01</div>
+        <div class="how-step-title" data-i18n="how.1.title">Diagnóstico rápido</div>
+        <p class="how-step-desc" data-i18n="how.1.desc">En 2 semanas entendemos tu operación: dónde pierdes tiempo, dinero y energía.</p>
+        <div class="how-connector">→</div>
+      </div>
+      <div class="how-step reveal reveal-delay-1" style="position:relative;">
+        <div class="how-step-num">02</div>
+        <div class="how-step-title" data-i18n="how.2.title">Diseño & piloto</div>
+        <p class="how-step-desc" data-i18n="how.2.desc">Diseñamos la solución con tu equipo y la probamos en pequeño antes de escalar. Creamos el mínimo producto viable antes de implementar.</p>
+        <div class="how-connector">→</div>
+      </div>
+      <div class="how-step reveal reveal-delay-2">
+        <div class="how-step-num">03</div>
+        <div class="how-step-title" data-i18n="how.3.title">Implementación & adopción</div>
+        <p class="how-step-desc" data-i18n="how.3.desc">Desplegamos la solución y acompañamos a tu equipo hasta que el cambio es parte de su ADN. Ahí es cuando terminamos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-section" class="full-bleed" style="max-width:none; background:var(--bg);">
+  <div style="text-align:center; max-width:720px; margin:0 auto; padding: 120px 48px;">
+    <div class="cta-eyebrow reveal" data-i18n="cta.eyebrow">CONVERSACIÓN SIN COSTO ·</div>
+    <h2 class="reveal reveal-delay-1" data-i18n="cta.title">¿Listo para reinventar<br/>tu operación?</h2>
+    <p class="hero-sub reveal reveal-delay-2" style="margin:24px auto 48px;" data-i18n="cta.sub">Agenda tu espacio. En 30 minutos diseñaremos un plan para entender tus necesidades.</p>
+    <div class="reveal reveal-delay-3" style="display:flex; justify-content:center;">
+      <a href="https://www.linkedin.com/in/luzadrianawilches/" target="_blank" rel="noopener" class="btn-primary" style="display:inline-flex; align-items:center; gap:12px; text-decoration:none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <span data-i18n="cta.btn">Conectar en LinkedIn</span>
+      </a>
+    </div>
+    <p class="cta-note reveal reveal-delay-4" data-i18n="cta.note">Sin compromiso. Respuesta en menos de 24 horas.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy" data-i18n="footer.copy">© 2026 · Consultoría de Procesos · All rights reserved</div>
+  <ul class="footer-links">
+    <li><a href="https://www.linkedin.com/in/luzadrianawilches/" target="_blank">LinkedIn</a></li>
+    <li><a href="#" data-i18n="footer.whatsapp">WhatsApp</a></li>
+    <li><a href="#" data-i18n="footer.email">Email</a></li>
+  </ul>
+</footer>
+
+<!-- TWEAKS PANEL -->
+<div id="tweaks-panel">
+  <div class="tweak-title">Tweaks</div>
+  <div class="tweak-row">
+    <div class="tweak-label">Color acento</div>
+    <div class="tweak-options">
+      <button class="tweak-opt" onclick="setAccent('oklch(0.60 0.18 163)', this)">Verde</button>
+      <button class="tweak-opt" onclick="setAccent('oklch(0.55 0.18 250)', this)">Azul</button>
+      <button class="tweak-opt green-active" onclick="setAccent('oklch(0.58 0.18 30)', this)">Naranja</button>
+      <button class="tweak-opt" onclick="setAccent('oklch(0.52 0.18 320)', this)">Violeta</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <div class="tweak-label">Densidad</div>
+    <div class="tweak-options">
+      <button class="tweak-opt" onclick="setDensity('compact', this)">Compacto</button>
+      <button class="tweak-opt active" onclick="setDensity('normal', this)">Normal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── i18n TRANSLATIONS ──────────────────────────────────────────────────────
+const translations = {
+  es: {
+    "meta.title": "Consultoría de Procesos — Tu empresa, potencIAda.",
+    "nav.brand": "Consultoría de Procesos",
+    "nav.diagnosis": "Diagnóstico",
+    "nav.services": "Servicios",
+    "nav.approach": "Enfoque",
+    "nav.cta": "Hablemos →",
+    "hero.eyebrow": "Rediseño · Automatización · Gestión del Cambio",
+    "hero.h1": 'Tu empresa,<br/><em style="color:rgb(223,11,11)">potenc<span style="color:oklch(0.72 0.18 30)">IA</span>da.</em>',
+    "hero.sub": 'Transformamos cómo trabaja tu empresa — y nos quedamos hasta que tu equipo no quiera volver atrás.<br/><br/>Cada <strong>reproceso</strong> es crecimiento que pierdes.',
+    "hero.cta1": "Agenda una conversación",
+    "hero.cta2": "Ver servicios",
+    "hero.stat1": '"Perdidos por data errónea en empresas medianas"<br/><small style="font-weight:500;letter-spacing:0.06em"><em>Gartner</em></small>',
+    "hero.stat2": '"Del salario anual te cuesta reemplazar un empleado"<br/><small style="font-weight:500;letter-spacing:0.06em"><em>Gallup</em></small>',
+    "hero.stat3": '<strong>Conectamos</strong> con tu equipo desde el inicio. Hablamos un mismo idioma.',
+    "marquee.1": "Rediseño de procesos",
+    "marquee.2": "Automatización",
+    "marquee.3": "Gestión del cambio",
+    "marquee.4": "Digitalización",
+    "marquee.5": "Eficiencia operativa",
+    "marquee.6": "Transformación",
+    "pain.title": "¿Te suena familiar?",
+    "pain.1.title": 'El día se va en tareas <span style="color:oklch(0.72 0.18 30)">manuales</span>',
+    "pain.1.desc": "Tu equipo dedica horas a copiar, pegar, enviar correos y actualizar documentos que deberían ser automáticas.",
+    "pain.2.title": 'Los <span style="color:oklch(0.72 0.18 30)">errores</span> se repiten y nadie sabe por qué',
+    "pain.2.desc": "Fallas sin dueño, reprocesos costosos y clientes que lo sienten. El problema no es la gente — es el proceso.",
+    "pain.3.title": 'Quieres <span style="color:oklch(0.72 0.18 30)">evolucionar</span> pero no sabes por dónde empezar',
+    "pain.3.desc": "Hay muchas herramientas, muchos consultores, pero no un camino claro. La tecnología se siente abrumadora.",
+    "pain.4.title": 'Tu equipo <span style="color:oklch(0.72 0.18 30)">resiste</span> los cambios',
+    "pain.4.desc": "Implementaste algo nuevo y el equipo volvió a lo de siempre. Los cambios sin gestión adecuada no duran.",
+    "services.title": "Lo que hacemos",
+    "services.1.title": "Rediseño de Procesos",
+    "services.1.subtitle": "Process Redesign",
+    "services.1.desc": 'Entendemos cómo trabaja tu empresa hoy, identificamos las <span style="color:oklch(0.72 0.18 30)">oportunidades</span> y diseñamos un modelo operativo que realmente escale.',
+    "services.2.title": "Automatización",
+    "services.2.subtitle": "Process Automation",
+    "services.2.desc": 'Identificamos qué automatizar primero para el mayor <span style="color:oklch(0.72 0.18 30)">impacto</span> con el menor costo. Implementamos con herramientas accesibles para tu <span style="color:oklch(0.72 0.18 30)">presupuesto</span>.',
+    "services.3.title": "Gestión del Cambio",
+    "services.3.subtitle": "Change Management",
+    "services.3.desc": 'El <span style="color:oklch(0.72 0.18 30)">cambio real</span> ocurre cuando las <span style="color:oklch(0.72 0.18 30)">personas</span> lo <span style="color:oklch(0.72 0.18 30)">adoptan</span>. Trabajamos con tu equipo para que los nuevos procesos permanezcan.',
+    "services.3.tag1": "Comunicación",
+    "services.3.tag2": "Capacitación",
+    "services.3.tag3": "Adopción",
+    "diff.label": "Lo que nos hace distintos ·",
+    "diff.quote": '"Hablamos el mismo idioma que tu equipo."',
+    "diff.body1": "No llegamos a imponer metodologías ni a dejar manuales que pocos leen. Nos sentamos con tu gente, entendemos su realidad y co-diseñamos las soluciones.",
+    "diff.body2": "Eso se traduce en cambios que duran. En equipos que no solo toleran la transformación, sino que la lideran.",
+    "diff.card1.label": "Enfoque · Approach",
+    "diff.card1.title": "Juntos encontramos el camino",
+    "diff.card1.desc": "Descubrimos junto a tu equipo nuevas oportunidades buscando el mayor impacto.",
+    "diff.card2.label": "Presupuesto · Budget",
+    "diff.card2.title": "Soluciones a tu medida económica",
+    "diff.card2.desc": "Herramientas de alto impacto con costos accesibles. Calculamos el retorno de tu inversión y los gastos recurrentes futuros.",
+    "diff.card3.label": "Continuidad · Continuity",
+    "diff.card3.title": "Adopción, no aversión",
+    "diff.card3.desc": "Los cambios que implementamos se quedan. Trabajamos hasta que la adopción sea real y sostenible.",
+    "how.title": "¿Cómo trabajamos?",
+    "how.1.title": "Diagnóstico rápido",
+    "how.1.desc": "En 2 semanas entendemos tu operación: dónde pierdes tiempo, dinero y energía.",
+    "how.2.title": "Diseño & piloto",
+    "how.2.desc": "Diseñamos la solución con tu equipo y la probamos en pequeño antes de escalar. Creamos el mínimo producto viable antes de implementar.",
+    "how.3.title": "Implementación & adopción",
+    "how.3.desc": "Desplegamos la solución y acompañamos a tu equipo hasta que el cambio es parte de su ADN. Ahí es cuando terminamos.",
+    "cta.eyebrow": "CONVERSACIÓN SIN COSTO ·",
+    "cta.title": "¿Listo para reinventar<br/>tu operación?",
+    "cta.sub": "Agenda tu espacio. En 30 minutos diseñaremos un plan para entender tus necesidades.",
+    "cta.btn": "Conectar en LinkedIn",
+    "cta.note": "Sin compromiso. Respuesta en menos de 24 horas.",
+    "footer.copy": "© 2026 · Consultoría de Procesos · Todos los derechos reservados",
+    "footer.whatsapp": "WhatsApp",
+    "footer.email": "Email"
+  },
+  en: {
+    "meta.title": "Process Consulting — Your company, empowered.",
+    "nav.brand": "Process Consulting",
+    "nav.diagnosis": "Diagnosis",
+    "nav.services": "Services",
+    "nav.approach": "Approach",
+    "nav.cta": "Let's talk →",
+    "hero.eyebrow": "Redesign · Automation · Change Management",
+    "hero.h1": 'Your company,<br/><em style="color:rgb(223,11,11)">reinv<span style="color:oklch(0.72 0.18 30)">AI</span>nted.</em>',
+    "hero.sub": 'We transform how your company works \u2014 and stay until your team never wants to go back.<br/><br/>Every <strong>rework</strong> is growth you\u2019re losing.',
+    "hero.cta1": "Schedule a call",
+    "hero.cta2": "View services",
+    "hero.stat1": '"Lost to bad data in mid-size companies"<br/><small style="font-weight:500;letter-spacing:0.06em"><em>Gartner</em></small>',
+    "hero.stat2": '"Of annual salary to replace one employee"<br/><small style="font-weight:500;letter-spacing:0.06em"><em>Gallup</em></small>',
+    "hero.stat3": '<strong>We connect</strong> with your team from day one. No jargon. Same language.',
+    "marquee.1": "Process Redesign",
+    "marquee.2": "Automation",
+    "marquee.3": "Change Management",
+    "marquee.4": "Digitalization",
+    "marquee.5": "Operational Efficiency",
+    "marquee.6": "Transformation",
+    "pain.title": "Does this sound familiar?",
+    "pain.1.title": 'Your day is lost to <span style="color:oklch(0.72 0.18 30)">manual</span> tasks',
+    "pain.1.desc": "Your team spends hours copying, pasting, sending emails and updating documents that should be automated.",
+    "pain.2.title": '<span style="color:oklch(0.72 0.18 30)">Errors</span> repeat and nobody knows why',
+    "pain.2.desc": "Ownerless failures, costly rework and customers who feel it. The problem isn't your people — it's the process.",
+    "pain.3.title": 'You want to <span style="color:oklch(0.72 0.18 30)">evolve</span> but don\u0027t know where to start',
+    "pain.3.desc": "There are too many tools, too many consultants, but no clear path. Technology feels overwhelming.",
+    "pain.4.title": 'Your team <span style="color:oklch(0.72 0.18 30)">resists</span> change',
+    "pain.4.desc": "You rolled out something new and the team went back to the old way. Change without change management doesn't stick.",
+    "services.title": "What we do",
+    "services.1.title": "Process Redesign",
+    "services.1.subtitle": "Rediseño de Procesos",
+    "services.1.desc": "We understand how your company works today, identify the opportunities, and design an operating model that truly scales.",
+    "services.2.title": "Automation",
+    "services.2.subtitle": "Automatización",
+    "services.2.desc": "We identify what to automate first for the highest impact at the lowest cost. We implement with tools that fit your budget.",
+    "services.3.title": "Change Management",
+    "services.3.subtitle": "Gestión del Cambio",
+    "services.3.desc": "Real change happens when people adopt it. We work with your team so the new processes stick permanently.",
+    "services.3.tag1": "Communication",
+    "services.3.tag2": "Training",
+    "services.3.tag3": "Adoption",
+    "diff.label": "What sets us apart ·",
+    "diff.quote": '"We speak your team\u0027s language."',
+    "diff.body1": "We don't arrive to impose methodologies or leave manuals nobody reads. We sit with your people, understand their reality, and co-design solutions.",
+    "diff.body2": "That translates into lasting change. Teams that don't just tolerate transformation — they lead it.",
+    "diff.card1.label": "Approach · Enfoque",
+    "diff.card1.title": "We find the path together",
+    "diff.card1.desc": "We discover new opportunities alongside your team, always seeking the highest impact.",
+    "diff.card2.label": "Budget · Presupuesto",
+    "diff.card2.title": "Solutions tailored to your budget",
+    "diff.card2.desc": "High-impact tools at accessible costs. We calculate your ROI and future recurring expenses.",
+    "diff.card3.label": "Continuity · Continuidad",
+    "diff.card3.title": "Adoption, not aversion",
+    "diff.card3.desc": "The changes we implement stay. We work until adoption is real and sustainable.",
+    "how.title": "How we work",
+    "how.1.title": "Quick diagnosis",
+    "how.1.desc": "In 2 weeks we map your operation: where you're losing time, money and energy.",
+    "how.2.title": "Design & pilot",
+    "how.2.desc": "We design the solution with your team and test it small before scaling. We build the minimum viable product before full implementation.",
+    "how.3.title": "Implementation & adoption",
+    "how.3.desc": "We deploy the solution and stay with your team until the change is part of their DNA. That's when we're done.",
+    "cta.eyebrow": "FREE CONSULTATION ·",
+    "cta.title": "Ready to reinvent<br/>your operations?",
+    "cta.sub": "Book your slot. In 30 minutes we'll design a plan to understand your needs.",
+    "cta.btn": "Connect on LinkedIn",
+    "cta.note": "No commitment. Response within 24 hours.",
+    "footer.copy": "© 2026 · Process Consulting · All rights reserved",
+    "footer.whatsapp": "WhatsApp",
+    "footer.email": "Email"
+  }
+};
+
+// ── APPLY LANGUAGE ──────────────────────────────────────────────────────────
+let currentLang = 'es';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.documentElement.lang = lang;
+
+  // Update toggle buttons
+  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+  const t = translations[lang];
+
+  // Update <title>
+  document.title = t['meta.title'] || document.title;
+
+  // Update all data-i18n elements (except special ones)
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (!t[key]) return;
+    // Skip hero h1 and sub — handled separately
+    if (key === 'hero.h1' || key === 'hero.sub') return;
+    // Use innerHTML for keys that may contain HTML
+    el.innerHTML = t[key];
+  });
+
+  // Hero h1 special handling
+  const heroH1 = document.getElementById('hero-h1');
+  if (heroH1 && t['hero.h1']) heroH1.innerHTML = t['hero.h1'];
+
+  // Hero sub special handling
+  const heroSub = document.getElementById('hero-sub');
+  if (heroSub && t['hero.sub']) heroSub.innerHTML = t['hero.sub'];
+}
+
+// ── DETECT BROWSER LANGUAGE ─────────────────────────────────────────────────
+function detectLang() {
+  // Check localStorage first
+  const saved = localStorage.getItem('lang');
+  if (saved && translations[saved]) return saved;
+  // Check browser language
+  const browserLang = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
+  if (browserLang.startsWith('en')) return 'en';
+  return 'es';
+}
+
+// ── TWEAKS ──────────────────────────────────────────────────────────────────
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{"accent":"oklch(0.58 0.18 30)","density":"normal"}/*EDITMODE-END*/;
+
+function setAccent(color, btn) {
+  document.documentElement.style.setProperty('--green', color);
+  document.documentElement.style.setProperty('--green-light', color.replace(/[\d.]+(?=\s+[\d.]+\s+[\d.]+\))/, '0.94').replace(/[\d.]+(?=\s+[\d.]+\))/, '0.06'));
+  document.querySelectorAll('.tweak-opt').forEach(b => {
+    if (b.onclick?.toString().includes('setAccent')) b.classList.remove('green-active', 'active');
+  });
+  btn.classList.add('green-active');
+  window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { accent: color } }, '*');
+}
+
+function setDensity(d, btn) {
+  document.querySelectorAll('.tweak-opt').forEach(b => {
+    if (b.onclick?.toString().includes('setDensity')) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  document.querySelectorAll('section').forEach(s => {
+    s.style.paddingTop = d === 'compact' ? '72px' : '';
+    s.style.paddingBottom = d === 'compact' ? '72px' : '';
+  });
+  window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { density: d } }, '*');
+}
+
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode') document.getElementById('tweaks-panel').classList.add('open');
+  if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').classList.remove('open');
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+if (TWEAK_DEFAULTS.accent) document.documentElement.style.setProperty('--green', TWEAK_DEFAULTS.accent);
+
+// ── REVEAL ON SCROLL ────────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+setLang(detectLang());
+</script>
+</body>
+</html>
